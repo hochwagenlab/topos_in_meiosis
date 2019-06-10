@@ -9,8 +9,8 @@ library(ggplot2)
 
 # Figure 1a
 
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -51,7 +51,7 @@ plot_genomeview <- function(df_samp1,df_samp2,position1,position2,name1,name2,ch
        xlab=paste0('Position on chromosome ',chrnum,' (kb)'), ylab=name2, type='h',col=color2,frame.plot=F)#,
   polygon(bx,by,col=color2,border = NA)
   par(mfrow=c(1,1))
-  
+
 }
 
 Top2_wtdgv <- genomeView(Top2_wtd,"II",10)
@@ -63,8 +63,8 @@ plot_genomeview(Top1_mycdgv,Top2_wtdgv,640,720,"Top1","Top2","II","green","blue"
 ####################################################################################
 # Figure 1b
 
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
@@ -107,7 +107,7 @@ p
 # Figure 1c
 # Top2
 #convergent regions
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -176,9 +176,9 @@ p
 ####################################################################################
 # Figure 1d-g
 
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
-mnase3 = rtracklayer::import.bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Nucleosome_replicates_PM-MACS2/Nucleosome_reps-SK1-MACS2_treat_pileup.bdg")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+mnase3 = rtracklayer::import.bedGraph("Nucleosome_reps-SK1-MACS2_treat_pileup.bdg")
 
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
@@ -230,4 +230,3 @@ EnrichedHeatmap(prommat, col = col_fun, name = "Top2",
                 row_order = 1:length(prom))+
   Heatmap(partition, col = structure(1:4, names = as.character(1:4)), name = "",row_order = 1:length(prom),
           show_row_names = FALSE, width = unit(5, "mm"))
-

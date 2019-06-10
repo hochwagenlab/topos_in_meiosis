@@ -12,24 +12,24 @@ library(EnrichedHeatmap)
 spikein_normalization_factor_from_counts <- function(
   ref_chip_counts, ref_input_counts, test_chip_counts, test_input_counts,
   return_counts=FALSE) {
-  
+
   # Put paths in list
   files <- list(ref_chip=ref_chip_counts, ref_input=ref_input_counts,
                 test_chip=test_chip_counts, test_input=test_input_counts)
-  
+
   # Convert each element into list, if not one already
   for (i in seq_along(files)) {
     if (!is.list(files[[i]])) files[[i]] <- list(files[[i]])
   }
-  
+
   # Print files to read to console
   message('>>> Read alignment count files:')
   for (i in seq_along(files)) {
     for (file in files[[i]]) {
       message('   ', basename(file))
     }
-  }    
-  
+  }
+
   message()
   # Read files into tibble in list
   tables <- list()
@@ -38,7 +38,7 @@ spikein_normalization_factor_from_counts <- function(
                           simplify=FALSE, USE.NAMES=TRUE)
   }
   names(tables) <- names(files)
-  
+
   message()
   # Get read counts per chromosome
   message('>>> Count reads per genome:')
@@ -48,7 +48,7 @@ spikein_normalization_factor_from_counts <- function(
                           simplify=FALSE, USE.NAMES=TRUE)
   }
   names(counts) <- names(tables)
-  
+
   # Add-up counts for replicates (results in nested lists)
   for (i in seq_along(counts)) {
     if (length(counts[[i]]) > 1) {
@@ -59,22 +59,22 @@ spikein_normalization_factor_from_counts <- function(
       counts[[i]] <- total
     } else counts[[i]] <- unlist(counts[[i]])
   }
-  
+
   if (return_counts) {
     message('---')
     message('Done!')
     return(counts)
   }
-  
+
   # Compute normalization factor
   result <- normalization_factor(ctrl_input=counts$ref_input,
                                  ctrl_chip=counts$ref_chip,
                                  test_input=counts$test_input,
                                  test_chip=counts$test_chip)
-  
+
   message('---')
   message('Done!')
-  
+
   return(result)
 }
 
@@ -85,14 +85,14 @@ sum_per_genome <- function(df) {
     df[apply(df, 1, function(x) str_detect(x[1],'_S288C')), 2])
   SK1 <- sum(
     df[apply(df, 1, function(x) str_detect(x[1], '_SK1')), 2])
-  
+
   # Print result to console
   message('  S288C: ', formatC(S288C, big.mark=",",
                                drop0trailing=TRUE, format="f"))
   message('  SK1: ', formatC(SK1, big.mark=",",
                              drop0trailing=TRUE, format="f"))
   message('      ', round(S288C * 100 / (SK1 + S288C), 1), '% spike-in reads')
-  
+
   # Return result as named vector
   c('S288C'=S288C, 'SK1'=SK1)
 }
@@ -103,28 +103,27 @@ normalization_factor <- function(ctrl_input, ctrl_chip,
   # Compute Q values
   Q_ctrl_input <- ctrl_input['S288C'] / ctrl_input['SK1']
   Q_ctrl_chip <- ctrl_chip['S288C'] / ctrl_chip['SK1']
-  
+
   Q_test_input <- test_input['S288C'] / test_input['SK1']
   Q_test_chip <- test_chip['S288C'] / test_chip['SK1']
-  
+
   # Compute normalization factors
   a_ctrl <- Q_ctrl_input / Q_ctrl_chip
   a_test <- Q_test_input / Q_test_chip
-  
+
   # Return reference strain-centric normalization factor
   a_test/ a_ctrl
 }
 
 #####
-setwd('/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1_S288c_Yue_hybrid_MACS2_FE/')
 read_counts <- data.frame(
   Condition=c('3h #1', '0h #1'),
   NF=c(1,
        spikein_normalization_factor_from_counts(
-         ref_chip_counts='Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR/stats_HFY77AFXY_n01_AH7797-0h-chipTop2_S288c_SK1_Yue-PM.txt',
-         ref_input_counts='Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR/stats_HFY77AFXY_n01_AH7797-0h-input_S288c_SK1_Yue-PM.txt',
-         test_chip_counts='Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR/stats_HFY77AFXY_n01_AH7797-3h-chipTop2_S288c_SK1_Yue-PM.txt',
-         test_input_counts='Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR/stats_HFY77AFXY_n01_AH7797-3h-inputTop2_S288c_SK1_Yue-PM.txt')
+         ref_chip_counts='stats_HFY77AFXY_n01_AH7797-0h-chipTop2_S288c_SK1_Yue-PM.txt',
+         ref_input_counts='stats_HFY77AFXY_n01_AH7797-0h-input_S288c_SK1_Yue-PM.txt',
+         test_chip_counts='stats_HFY77AFXY_n01_AH7797-3h-chipTop2_S288c_SK1_Yue-PM.txt',
+         test_input_counts='stats_HFY77AFXY_n01_AH7797-3h-inputTop2_S288c_SK1_Yue-PM.txt')
   )
 )
 read_counts
@@ -133,15 +132,14 @@ read_counts
 #S288C     3h #1 1.641768
 
 #second set
-setwd('/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1_S288c_Yue_hybrid_MACS2_FE/')
 read_counts <- data.frame(
   Condition=c('3h #2', '0h #2'),
   NF=c(1,
        spikein_normalization_factor_from_counts(
-         ref_chip_counts='Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR/stats_HWV57AFXX_n01_ah7797c0htop2-spikein-0318_S288c_SK1_Yue-PM.txt',
-         ref_input_counts='Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR/stats_HWV57AFXX_n01_ah7797i0h-0318_S288c_SK1_Yue-PM.txt',
-         test_chip_counts='Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR/stats_HWV57AFXX_n01_ah7797c3htop2-spikein-0318_S288c_SK1_Yue-PM.txt',
-         test_input_counts='Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR/stats_HWV57AFXX_n01_ah7797i3h-0318_S288c_SK1_Yue-PM.txt')
+         ref_chip_counts='stats_HWV57AFXX_n01_ah7797c0htop2-spikein-0318_S288c_SK1_Yue-PM.txt',
+         ref_input_counts='stats_HWV57AFXX_n01_ah7797i0h-0318_S288c_SK1_Yue-PM.txt',
+         test_chip_counts='stats_HWV57AFXX_n01_ah7797c3htop2-spikein-0318_S288c_SK1_Yue-PM.txt',
+         test_input_counts='stats_HWV57AFXX_n01_ah7797i3h-0318_S288c_SK1_Yue-PM.txt')
   )
 )
 read_counts
@@ -168,8 +166,8 @@ ggplot(nfactors,aes(x=V2,y=nfactors,fill=V2,width=0.8)) +
 ####################################################################################
 ####################################################################################
 # Figure 3b-c
-ah7797_3h <- import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1_S288c_Yue_hybrid_MACS2_FE/Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR/Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR_FE.bdg")
-ah7797_0h <- import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1_S288c_Yue_hybrid_MACS2_FE/Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR/Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR_FE.bdg")
+ah7797_3h <- import_bedGraph("Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR_FE.bdg")
+ah7797_0h <- import_bedGraph("Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR_FE.bdg")
 
 nf_ah7797_3h=(1.641768+1.279824)/2 # calculation in 3a
 nf_ah7797_0h=1
@@ -237,7 +235,7 @@ p <- ggplot(allgroup0, aes(Position, Mean, group=Data, fill=Data,color=Data)) +
 p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha=0.3,colour=NA) + geom_line()+ylim(0.8,3.1)
 p
 
-# Figure 3c: 3h 
+# Figure 3c: 3h
 prom13 <- normalizeToMatrix(ah7797_3hnf, promoter[promoter$class==1], value_column = "score",
                             extend = 1000, mean_mode = "weighted", w = 1,empty_value=NA)
 prom23 <- normalizeToMatrix(ah7797_3hnf, promoter[promoter$class==2], value_column = "score",
@@ -271,8 +269,8 @@ p
 ####################################################################################
 # Figure 3d-f
 
-Top2_3 = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1_S288c_Yue_hybrid_MACS2_FE/Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR/Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR_FE.bdg")
-Top2_0 = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1_S288c_Yue_hybrid_MACS2_FE/Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR/Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR_FE.bdg")
+Top2_3 = import_bedGraph("Top2-WT3h-748-847-reps_S288C_SK1_Yue_PM_SPMR_FE.bdg")
+Top2_0 = import_bedGraph("Top2-WT0h-747-846-reps_S288C_SK1_Yue_PM_SPMR_FE.bdg")
 Top2_0_sk1 <- Top2_0[grep("_SK1",Top2_0)]
 Top2_3_sk1 <- Top2_3[grep("_SK1",Top2_3)]
 levelstodrop <- c("chrVI_S288C","chrIII_S288C","chrIV_S288C","chrVIII_S288C","chrII_S288C","chrVII_S288C","chrIX_S288C","chrXVI_S288C","chrXIII_S288C",
@@ -406,4 +404,3 @@ p <- ggplot(both, aes(x=Position, y=Mean, group=Data, fill=Data,color=Data)) +
                      labels = c("-1 kb", "hotspot", "1 kb"))
 p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha=0.3, color=NA)+ylim(0.7,3.2)
 p + geom_line()
-

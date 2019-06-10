@@ -5,7 +5,7 @@
 library(hwglabr2)
 library(GenomicRanges)
 
-brartotmrna <- read.csv('/Volumes/LabShare/Jonna/papers/Topo/figures/RNAseq/GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
+brartotmrna <- read.csv('GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
 mrna3h <- brartotmrna[,c('gene','X3hr.totRNA.rpkm')]
 mrna10h <- brartotmrna[,c('gene','X10hr.totRNA.rpkm')]
 mrnaAA <- brartotmrna[,c('gene','MATa.a.totRNA.rpkm')]

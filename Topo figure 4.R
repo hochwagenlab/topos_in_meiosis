@@ -7,9 +7,9 @@ library(hwglabr2)
 library(GenomicRanges)
 # Fig 4a
 ## Spo11 oligos lined up at Start, sorted by txn level
-spo11oligo <- rtracklayer::import.bedGraph("/Volumes/LabShare/Jonna/Spo11_oligo_mapping/SK1Yue/Spo11oligo_WT1_SRR-clip-MACS2_extsize37/Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
+spo11oligo <- rtracklayer::import.bedGraph("Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('2017.06.16_SK1Yue_EdgeR_tpm.csv')
 
 gff <- gff[which(gff$type=='gene')]
 colnames(transcription)[1] <- "ID"
@@ -46,9 +46,9 @@ EnrichedHeatmap(spo11oligo_atg, col = col_fun, name = "Spo11", row_title_rot = 0
 
 
 ## Spo11 oligos lined up at STOPs, sorted by txn level
-spo11oligo <- rtracklayer::import.bedGraph("/Volumes/LabShare/Jonna/Spo11_oligo_mapping/SK1Yue/Spo11oligo_WT1_SRR-clip-MACS2_extsize37/Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
+spo11oligo <- rtracklayer::import.bedGraph("Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('2017.06.16_SK1Yue_EdgeR_tpm.csv')
 
 gff <- gff[which(gff$type=='gene')]
 colnames(transcription)[1] <- "ID"
@@ -87,7 +87,7 @@ EnrichedHeatmap(spo11oligo_stop, col = col_fun, name = "DSBs", row_title_rot = 0
 ####################################################################################
 # Fig 4b
 
-spo11oligo <- rtracklayer::import.bedGraph("/Volumes/LabShare/Jonna/Spo11_oligo_mapping/SK1Yue/Spo11oligo_WT1_SRR-clip-MACS2_extsize37/Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
+spo11oligo <- rtracklayer::import.bedGraph("Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
 
 intergen <- hwglabr2::get_intergenic_regions("SK1Yue",as_gr=T)
 prom <- intergen[intergen$type=="divergent"|intergen$type=='tandem']
@@ -109,7 +109,7 @@ EnrichedHeatmap(prommat, col = col_fun, name = "Spo11",
 ####################################################################################
 # Fig 4c
 
-mnase3 = rtracklayer::import.bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Nucleosome_replicates_PM-MACS2/Nucleosome_reps-SK1-MACS2_treat_pileup.bdg")
+mnase3 = rtracklayer::import.bedGraph("Nucleosome_reps-SK1-MACS2_treat_pileup.bdg")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -136,10 +136,10 @@ EnrichedHeatmap(prommat, col = col_fun, name = "Nuc 3h",
                 row_order = 1:length(prom))
 ####################################################################################
 ####################################################################################
-# Figure 4d: 
+# Figure 4d:
 
 # Top1 at hotspots
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -174,7 +174,7 @@ EnrichedHeatmap(Top1d_at_hotspots, col = col_fun, name = "Top1", row_title_rot =
 
 
 # Top2 at hotspots
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -216,8 +216,8 @@ import.broadPeak <- function(...) {
 }
 
 SK1Yue_Spo11_DSB <- get_dsb_hotspots('SK1Yue')
-Top2_peak = import.broadPeak("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_peaks.broadPeak")
-Top1_peak = import.broadPeak("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_peaks.broadPeak")
+Top2_peak = import.broadPeak("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_peaks.broadPeak")
+Top1_peak = import.broadPeak("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_peaks.broadPeak")
 
 #Hotspots that overlap with Top2
 Spo11Top2 = findOverlaps(Top2_peak,SK1Yue_Spo11_DSB)
