@@ -5,7 +5,7 @@
 library(hwglabr2)
 library(GenomicRanges)
 
-brartotmrna <- read.csv('GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
+brartotmrna <- read.csv('/Volumes/LabShare/Jonna/papers/Topo/figures/RNAseq/GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
 mrna3h <- brartotmrna[,c('gene','X3hr.totRNA.rpkm')]
 mrna10h <- brartotmrna[,c('gene','X10hr.totRNA.rpkm')]
 mrnaAA <- brartotmrna[,c('gene','MATa.a.totRNA.rpkm')]
@@ -43,6 +43,10 @@ alldata <- list(lowlow$width,highhigh$width)
 par(las=1)
 boxplot(alldata,ylab="Intergenic size (bp)",names=c('low txn','high txn'),frame.plot=F,cex.lab=1.5,cex.axis=1.25,outline=F)
 wilcox.test(lowlow$width,highhigh$width,paired=F) # p-value = 1.131e-05
+mean(lowlow$width) #936.1322
+mean(highhigh$width) #929.5546
+median(lowlow$width) #434
+median(highhigh$width) #733
 
 # Meiotic 10h
 
@@ -74,6 +78,11 @@ par(las=1)
 boxplot(alldata,ylab="Intergenic size (bp)",names=c('low txn','high txn'),frame.plot=F,cex.lab=1.5,cex.axis=1.25,outline=F)
 wilcox.test(lowlow$width,highhigh$width,paired=F) # p-value = 3.933e-11
 
+mean(lowlow$width) #795.7273
+mean(highhigh$width) #1074.407
+median(lowlow$width) #407
+median(highhigh$width) #772.5
+
 # Non-meiotic
 
 txn_data <- 'MATa.a.totRNA.rpkm'
@@ -103,3 +112,8 @@ alldata <- list(lowlow$width,highhigh$width)
 par(las=1)
 boxplot(alldata,ylab="Intergenic size (bp)",names=c('low txn','high txn'),frame.plot=F,cex.lab=1.5,cex.axis=1.25,outline=F)
 wilcox.test(lowlow$width,highhigh$width,paired=F) # p-value = 0.004679
+
+mean(lowlow$width) #1043.414
+mean(highhigh$width) #845.4915
+median(lowlow$width) #478
+median(highhigh$width) #720

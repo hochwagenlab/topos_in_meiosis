@@ -9,7 +9,7 @@ library(tidyverse)
 
 # Figure 2a
 
-Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -20,7 +20,7 @@ gendiv = function(bdg) {
 Top1_mycd = gendiv(Top1_myc)
 
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
 gff <- gff[which(gff$type=='gene')]
 colnames(transcription)[1] <- "ID"
 gff <- data.frame(gff)
@@ -87,7 +87,7 @@ EnrichedHeatmap(Top1_stop, col = col_fun, name = "Top1", row_title_rot = 0,
 ####################################################################################
 # Figure 2b
 
-Top2_wt = hwglabr2::import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -98,7 +98,7 @@ gendiv = function(bdg) {
 Top2_wtd = gendiv(Top2_wt)
 
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
 gff <- gff[which(gff$type=='gene')]
 colnames(transcription)[1] <- "ID"
 gff <- data.frame(gff)
@@ -168,7 +168,7 @@ EnrichedHeatmap(Top2_stop, col = col_fun, name = "Top2", row_title_rot = 0,
 
 # Divergent IGRs
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
 intergen <- hwglabr2::get_intergenic_regions('SK1Yue',as_gr = T)
 divergent <- intergen[which(intergen$type=='divergent')]
 mcols(divergent)['widths'] <- width(divergent)
@@ -196,11 +196,14 @@ nrow(highhigh);nrow(lowlow)
 allwidths <- list(lowlow$widths,highhigh$widths)
 boxplot(allwidths,names=c('low txn','high txn'),ylab="Gene width (bp)",frame.plot=F,cex.lab=1.5,cex.axis=1.25,outline=F)
 wilcox.test(highhigh$widths,lowlow$widths,paired=F) # p-value = 2.736e-08***
-
+mean(lowlow$widths) #682.5794
+mean(highhigh$widths) #840.6538
+median(lowlow$widths) #393
+median(highhigh$widths) #674
 # Tandem IGRs
 
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
 intergen <- hwglabr2::get_intergenic_regions('SK1Yue',as_gr = T)
 tandem <- intergen[which(intergen$type=='tandem')]
 mcols(tandem)['widths'] <- width(tandem)
@@ -236,11 +239,14 @@ nrow(highhigh);nrow(lowlow)
 allwidths <- list(lowlow$widths,highhigh$widths)
 boxplot(allwidths,names=c('low txn','high txn'),ylab="Gene width (bp)",frame.plot=F,cex.lab=1.5,cex.axis=1.25,outline=F)
 wilcox.test(highhigh$widths,lowlow$widths,paired=F) # p-value = 0.7127
-
+mean(lowlow$widths) #876.0736
+mean(highhigh$widths) #638.6098
+median(lowlow$widths) #410
+median(highhigh$widths) #469
 ####################################################################################
 ####################################################################################
-# Figure 2g
-brartotmrna <- read.csv('GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
+# Figure 2d
+brartotmrna <- read.csv('/Volumes/LabShare/Jonna/papers/Topo/figures/RNAseq/GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
 mrna0h <- brartotmrna[,c('gene','X0hr.totRNA.rpkm')]
 mrnaveg <- brartotmrna[,c('gene','vexp.repl1.totrna.rpkm')]
 
@@ -277,6 +283,11 @@ alldata <- list(lowlow$width,highhigh$width)
 par(las=1)
 boxplot(alldata,ylab="Intergenic size (bp)",names=c('low txn','high txn'),frame.plot=F,cex.lab=1.5,cex.axis=1.25,outline=F)
 wilcox.test(lowlow$width,highhigh$width,paired=F) # p-value = 0.5389
+mean(lowlow$width) #1096.364
+mean(highhigh$width) #748.6
+median(lowlow$width) #551.5
+median(highhigh$width) #603.5
+
 
 # Pre-meiotic
 
@@ -306,3 +317,7 @@ alldata <- list(lowlow$width,highhigh$width)
 par(las=1)
 boxplot(alldata,ylab="Intergenic size (bp)",names=c('low txn','high txn'),frame.plot=F,cex.lab=1.5,cex.axis=1.25,outline=F)
 wilcox.test(lowlow$width,highhigh$width,paired=F) # p-value = 6.941e-08
+mean(lowlow$width) #777.6067
+mean(highhigh$width) #849.0435
+median(lowlow$width) #420.5
+median(highhigh$width) #725
