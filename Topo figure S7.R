@@ -1,4 +1,4 @@
-# Topo figure S6
+# Topo figure S7
 ####################################################################################
 ####################################################################################
 library(hwglabr2)
@@ -6,7 +6,7 @@ library(GenomicRanges)
 library(EnrichedHeatmap)
 library(ggplot2)
 
-# Figure 6c
+# Figure 7c
 
 Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-34C-493-533-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-34C-493-533-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 top2_1 = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-top2-4-496-537-Reps-SK1Yue-B3W3-MACS2/Top2-top2-4-496-537-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
