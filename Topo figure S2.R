@@ -1,7 +1,93 @@
 # Topo figure S2
 ####################################################################################
 ####################################################################################
-# Figure S2
+# Figure S2a
+
+Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+gendiv = function(bdg) {
+  gavg = average_chr_signal(bdg)$genome_avrg
+  print(gavg)
+  bdg_new <- bdg
+  bdg_new$score <- bdg_new$score/gavg
+  return(bdg_new)
+}
+Top1_mycd = gendiv(Top1_myc)
+
+gff <- hwglabr2::get_gff('SK1Yue')
+transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+gff <- gff[which(gff$type=='gene')]
+colnames(transcription)[1] <- "ID"
+gff <- data.frame(gff)
+gff_txn <- merge(x=gff,y=transcription[,c(1,3)],by='ID', all.x = TRUE)
+gff_txn <- gff_txn[which(gff_txn$seqnames!='chrMT'),]
+gff_txn <- gff_txn[which(gff_txn$seqnames!='scplasm1'),]
+gffgr <- GRanges(seqnames = gff_txn$seqnames,IRanges(start = gff_txn$start,end=gff_txn$end),strand = gff_txn$strand,transcription=gff_txn$AH119_3h,gene=gff_txn$Name)
+negstrand=gffgr[strand(gffgr)=='-']
+posstrand=gffgr[strand(gffgr)=='+']
+negstrandswitch <- GRanges(seqnames = seqnames(negstrand),ranges = IRanges(start=end(negstrand),end=end(negstrand)),strand=strand(negstrand),transcription=negstrand$transcription,gene=negstrand$gene)
+end(posstrand) <- start(posstrand)
+gffall <- c(posstrand,negstrandswitch)
+gffall_sort <- gffall[order(gffall$transcription,decreasing = T)]
+gffall_sort <- gffall_sort[which(gffall_sort$transcription!='<NA>')]
+
+Top1_atg <- EnrichedHeatmap::normalizeToMatrix(Top1_mycd, gffall_sort,
+                                               extend=c(500,0), w=1,empty_value=NA,
+                                               mean_mode="weighted",
+                                               value_column='score')
+par(las=1)
+sigrna <- data.frame(cbind(gffall_sort$transcription,rowSums(data.frame(Top1_atg))))
+colnames(sigrna) <- c('txn','top1')
+plot(log(sigrna$txn),log(sigrna$top1))
+abline(lm(data=sigrna,log(top1)~log(txn)))
+summary(lm(data=sigrna,log(top1)~log(txn)))
+cor(x=sigrna$txn,y=sigrna$top1, use="complete.obs", method="pearson")
+#[1] 0.2055718
+####################################################################################
+# Figure S2b
+
+Top2_wt = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+gendiv = function(bdg) {
+  gavg = average_chr_signal(bdg)$genome_avrg
+  print(gavg)
+  bdg_new <- bdg
+  bdg_new$score <- bdg_new$score/gavg
+  return(bdg_new)
+}
+Top2_wtd = gendiv(Top2_wt)
+
+gff <- hwglabr2::get_gff('SK1Yue')
+transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+gff <- gff[which(gff$type=='gene')]
+colnames(transcription)[1] <- "ID"
+gff <- data.frame(gff)
+gff_txn <- merge(x=gff,y=transcription[,c(1,3)],by='ID', all.x = TRUE)
+gff_txn <- gff_txn[which(gff_txn$seqnames!='chrMT'),]
+gff_txn <- gff_txn[which(gff_txn$seqnames!='scplasm1'),]
+gffgr <- GRanges(seqnames = gff_txn$seqnames,IRanges(start = gff_txn$start,end=gff_txn$end),strand = gff_txn$strand,transcription=gff_txn$AH119_3h,gene=gff_txn$Name)
+negstrand=gffgr[strand(gffgr)=='-']
+posstrand=gffgr[strand(gffgr)=='+']
+
+negstrandswitch <- GRanges(seqnames = seqnames(negstrand),ranges = IRanges(start=end(negstrand),end=end(negstrand)),strand=strand(negstrand),transcription=negstrand$transcription,gene=negstrand$gene)
+end(posstrand) <- start(posstrand)
+gffall <- c(posstrand,negstrandswitch)
+gffall_sort <- gffall[order(gffall$transcription,decreasing = T)]
+gffall_sort <- gffall_sort[which(gffall_sort$transcription!='<NA>')]
+Top2_atg <- EnrichedHeatmap::normalizeToMatrix(Top2_wtd, gffall_sort,
+                                               extend=c(500,0), w=10,empty_value=NA,
+                                               mean_mode="weighted",
+                                               value_column='score')
+
+par(las=1)
+sigrna2 <- data.frame(cbind(gffall_sort$transcription,rowSums(data.frame(Top2_atg))))
+colnames(sigrna2) <- c('txn','top2')
+plot(log(sigrna2$txn),log(sigrna2$top2))
+abline(lm(data=sigrna2,log(top2)~log(txn)))
+summary(lm(data=sigrna2,log(top2)~log(txn)))
+cor(x=sigrna2$txn,y=sigrna2$top2, use="complete.obs", method="pearson")
+#[1] 0.1829016
+
+####################################################################################
+# Figure S2c
 library(hwglabr2)
 library(GenomicRanges)
 

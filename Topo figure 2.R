@@ -41,51 +41,64 @@ gffall_sort <- gffall_sort[which(gffall_sort$transcription!='<NA>')]
 mcols(gffall_sort) <- DataFrame(class=c(rep(1:4, each=length(gffall_sort)/4),4,4))
 
 Top1_atg <- EnrichedHeatmap::normalizeToMatrix(Top1_mycd, gffall_sort,
-                                               extend=c(500,500), w=10,empty_value=NA,
+                                               extend=c(500,500), w=1,empty_value=NA,
                                                mean_mode="weighted",
                                                value_column='score')
+
 col_fun <- colorRamp2(quantile(Top1_atg, c( 0.01,0.25, 0.5, 0.75, 0.95),na.rm=T), c("skyblue", "aliceblue","white", "pink2","deeppink4"))
 partition <- gffall_sort$class
 EnrichedHeatmap(Top1_atg, col = col_fun, name = "Top1", row_title_rot = 0,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = 1:4),
-                                                                         show_error = T)),
-                top_annotation_height = unit(2, "cm"),
                 row_order = 1:length(gffall_sort),
                 split=gffall_sort$class,
                 axis_name = c("-500", "START","500"))+
   Heatmap(partition, col = structure(1:4, names = as.character(1:4)), name = "",row_order = 1:length(gffall_sort),
           show_row_names = FALSE, width = unit(5, "mm"))
 
-## STOP heatmap for Top2
+# plot averages
+Top1d_1 <- EnrichedHeatmap::normalizeToMatrix(Top1_mycd, gffall_sort[which(gffall_sort$class == 1)],
+                                              extend=c(500,500), w=1,
+                                              mean_mode="weighted",
+                                              value_column="score")
+Top1d_1ci <- hwglabr2::signal_mean_and_ci(signal_data=Top1d_1,
+                                          ci=0.95, rep_bootstrap=1000,
+                                          na_rm=TRUE)
+Top1d_2 <- EnrichedHeatmap::normalizeToMatrix(Top1_mycd, gffall_sort[which(gffall_sort$class == 2)],
+                                              extend=c(500,500), w=1,
+                                              mean_mode="weighted",
+                                              value_column="score")
+Top1d_2ci <- hwglabr2::signal_mean_and_ci(signal_data=Top1d_2,
+                                          ci=0.95, rep_bootstrap=1000,
+                                          na_rm=TRUE)
+Top1d_3 <- EnrichedHeatmap::normalizeToMatrix(Top1_mycd, gffall_sort[which(gffall_sort$class == 3)],
+                                              extend=c(500,500), w=1,
+                                              mean_mode="weighted",
+                                              value_column="score")
+Top1d_3ci <- hwglabr2::signal_mean_and_ci(signal_data=Top1d_3,
+                                          ci=0.95, rep_bootstrap=1000,
+                                          na_rm=TRUE)
+Top1d_4 <- EnrichedHeatmap::normalizeToMatrix(Top1_mycd, gffall_sort[which(gffall_sort$class == 4)],
+                                              extend=c(500,500), w=1,
+                                              mean_mode="weighted",
+                                              value_column="score")
+Top1d_4ci <- hwglabr2::signal_mean_and_ci(signal_data=Top1d_4,
+                                          ci=0.95, rep_bootstrap=1000,
+                                          na_rm=TRUE)
+group1_gg <- data.frame(Data="1",Position=seq(1, 1000), Top1d_1ci)
+group2_gg <- data.frame(Data="2",Position=seq(1, 1000), Top1d_2ci)
+group3_gg <- data.frame(Data="3",Position=seq(1, 1000), Top1d_3ci)
+group4_gg <- data.frame(Data="4",Position=seq(1, 1000), Top1d_4ci)
+allgroups <- rbind(group1_gg,group2_gg,group3_gg,group4_gg)
 
-gffgr <- GRanges(seqnames = gff_txn$seqnames,IRanges(start = gff_txn$start,end=gff_txn$end),strand = gff_txn$strand,transcription=gff_txn$AH119_3h,gene=gff_txn$Name)
-negstrand=gffgr[strand(gffgr)=='-']
-posstrand=gffgr[strand(gffgr)=='+']
-negstrandswitch <- GRanges(seqnames = seqnames(negstrand),ranges = IRanges(start=start(negstrand),end=start(negstrand)),strand=strand(negstrand),transcription=negstrand$transcription,gene=negstrand$gene)
-start(posstrand) <- end(posstrand)
-gffall <- c(posstrand,negstrandswitch)
-gffall_sort <- gffall[order(gffall$transcription,decreasing = T)]
-gffall_sort <- gffall_sort[which(gffall_sort$transcription!='<NA>')]
-mcols(gffall_sort) <- DataFrame(class=c(rep(1:4, each=length(gffall_sort)/4),4,4))
-
-Top1_stop <- EnrichedHeatmap::normalizeToMatrix(Top1_mycd, gffall_sort,
-                                                extend=c(500,500), w=10,empty_value=NA,
-                                                mean_mode="weighted",
-                                                value_column='score')
-col_fun <- colorRamp2(quantile(Top1_atg, c( 0.01,0.25, 0.5, 0.75, 0.95),na.rm=T), c("skyblue", "aliceblue","white", "pink2","deeppink4"))
-partition <- gffall_sort$class
-EnrichedHeatmap(Top1_stop, col = col_fun, name = "Top1", row_title_rot = 0,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = 1:4),
-                                                                         show_error = T)),
-                top_annotation_height = unit(2, "cm"),
-                row_order = 1:length(gffall_sort),
-                split=gffall_sort$class,
-                axis_name = c("-500", "STOP","500"))+
-  Heatmap(partition, col = structure(1:4, names = as.character(1:4)), name = "",row_order = 1:length(gffall_sort),
-          show_row_names = FALSE, width = unit(5, "mm"))
+# Set up the plot
+p <- ggplot(allgroups, aes(x=Position, y=Mean, group=Data, fill=Data,colour=Data))+
+  theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
+  geom_vline(xintercept = 500, lty = 3) +
+  scale_x_continuous(breaks = c(0, 500, 1000),
+                     labels = c('-0.5kb', 'ATG','0.5kb'))
+p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha=0.3, color=NA) + geom_line()
+p
 ####################################################################################
-####################################################################################
-# Figure 2b
+# ATG heatmap for Top2
 
 Top2_wt = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
@@ -97,27 +110,6 @@ gendiv = function(bdg) {
 }
 Top2_wtd = gendiv(Top2_wt)
 
-gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
-gff <- gff[which(gff$type=='gene')]
-colnames(transcription)[1] <- "ID"
-gff <- data.frame(gff)
-gff_txn <- merge(x=gff,y=transcription[,c(1,3)],by='ID', all.x = TRUE)
-gff_txn <- gff_txn[which(gff_txn$seqnames!='chrMT'),]
-gff_txn <- gff_txn[which(gff_txn$seqnames!='scplasm1'),]
-
-# ATG heatmap for Top2
-gffgr <- GRanges(seqnames = gff_txn$seqnames,IRanges(start = gff_txn$start,end=gff_txn$end),strand = gff_txn$strand,transcription=gff_txn$AH119_3h,gene=gff_txn$Name)
-negstrand=gffgr[strand(gffgr)=='-']
-posstrand=gffgr[strand(gffgr)=='+']
-
-negstrandswitch <- GRanges(seqnames = seqnames(negstrand),ranges = IRanges(start=end(negstrand),end=end(negstrand)),strand=strand(negstrand),transcription=negstrand$transcription,gene=negstrand$gene)
-end(posstrand) <- start(posstrand)
-gffall <- c(posstrand,negstrandswitch)
-gffall_sort <- gffall[order(gffall$transcription,decreasing = T)]
-gffall_sort <- gffall_sort[which(gffall_sort$transcription!='<NA>')]
-mcols(gffall_sort) <- DataFrame(class=c(rep(1:4, each=length(gffall_sort)/4),4,4))
-
 Top2_atg <- EnrichedHeatmap::normalizeToMatrix(Top2_wtd, gffall_sort,
                                                extend=c(500,500), w=10,empty_value=NA,
                                                mean_mode="weighted",
@@ -125,43 +117,55 @@ Top2_atg <- EnrichedHeatmap::normalizeToMatrix(Top2_wtd, gffall_sort,
 col_fun <- colorRamp2(quantile(Top2_atg, c( 0.01,0.25, 0.5, 0.75, 0.95),na.rm=T), c("skyblue", "aliceblue","white", "pink2","deeppink4"))
 partition <- gffall_sort$class
 EnrichedHeatmap(Top2_atg, col = col_fun, name = "Top2", row_title_rot = 0,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = 1:4),
-                                                                         show_error = T)),
-                top_annotation_height = unit(2, "cm"),
                 row_order = 1:length(gffall_sort),
                 split=gffall_sort$class,
                 axis_name = c("-500", "START","500"))+
   Heatmap(partition, col = structure(1:4, names = as.character(1:4)), name = "",row_order = 1:length(gffall_sort),
           show_row_names = FALSE, width = unit(5, "mm"))
 
-## STOP heatmap for Top2
+# plot averages
+Top2d_1 <- EnrichedHeatmap::normalizeToMatrix(Top2_wtd, gffall_sort[which(gffall_sort$class == 1)],
+                                              extend=c(500,500), w=1,
+                                              mean_mode="weighted",
+                                              value_column="score")
+Top2d_1ci <- hwglabr2::signal_mean_and_ci(signal_data=Top2d_1,
+                                          ci=0.95, rep_bootstrap=1000,
+                                          na_rm=TRUE)
+Top2d_2 <- EnrichedHeatmap::normalizeToMatrix(Top2_wtd, gffall_sort[which(gffall_sort$class == 2)],
+                                              extend=c(500,500), w=1,
+                                              mean_mode="weighted",
+                                              value_column="score")
+Top2d_2ci <- hwglabr2::signal_mean_and_ci(signal_data=Top2d_2,
+                                          ci=0.95, rep_bootstrap=1000,
+                                          na_rm=TRUE)
+Top2d_3 <- EnrichedHeatmap::normalizeToMatrix(Top2_wtd, gffall_sort[which(gffall_sort$class == 3)],
+                                              extend=c(500,500), w=1,
+                                              mean_mode="weighted",
+                                              value_column="score")
+Top2d_3ci <- hwglabr2::signal_mean_and_ci(signal_data=Top2d_3,
+                                          ci=0.95, rep_bootstrap=1000,
+                                          na_rm=TRUE)
+Top2d_4 <- EnrichedHeatmap::normalizeToMatrix(Top2_wtd, gffall_sort[which(gffall_sort$class == 4)],
+                                              extend=c(500,500), w=1,
+                                              mean_mode="weighted",
+                                              value_column="score")
+Top2d_4ci <- hwglabr2::signal_mean_and_ci(signal_data=Top2d_4,
+                                          ci=0.95, rep_bootstrap=1000,
+                                          na_rm=TRUE)
+group1_gg <- data.frame(Data="1",Position=seq(1, 1000), Top2d_1ci)
+group2_gg <- data.frame(Data="2",Position=seq(1, 1000), Top2d_2ci)
+group3_gg <- data.frame(Data="3",Position=seq(1, 1000), Top2d_3ci)
+group4_gg <- data.frame(Data="4",Position=seq(1, 1000), Top2d_4ci)
+allgroups <- rbind(group1_gg,group2_gg,group3_gg,group4_gg)
 
-gffgr <- GRanges(seqnames = gff_txn$seqnames,IRanges(start = gff_txn$start,end=gff_txn$end),strand = gff_txn$strand,transcription=gff_txn$AH119_3h,gene=gff_txn$Name)
-negstrand=gffgr[strand(gffgr)=='-']
-posstrand=gffgr[strand(gffgr)=='+']
-negstrandswitch <- GRanges(seqnames = seqnames(negstrand),ranges = IRanges(start=start(negstrand),end=start(negstrand)),strand=strand(negstrand),transcription=negstrand$transcription,gene=negstrand$gene)
-start(posstrand) <- end(posstrand)
-gffall <- c(posstrand,negstrandswitch)
-gffall_sort <- gffall[order(gffall$transcription,decreasing = T)]
-gffall_sort <- gffall_sort[which(gffall_sort$transcription!='<NA>')]
-mcols(gffall_sort) <- DataFrame(class=c(rep(1:4, each=length(gffall_sort)/4),4,4))
-
-Top2_stop <- EnrichedHeatmap::normalizeToMatrix(Top2_wtd, gffall_sort,
-                                                extend=c(500,500), w=10,empty_value=NA,
-                                                mean_mode="weighted",
-                                                value_column='score')
-col_fun <- colorRamp2(quantile(Top2_atg, c( 0.01,0.25, 0.5, 0.75, 0.95),na.rm=T), c("skyblue", "aliceblue","white", "pink2","deeppink4"))
-partition <- gffall_sort$class
-EnrichedHeatmap(Top2_stop, col = col_fun, name = "Top2", row_title_rot = 0,
-                top_annotation = HeatmapAnnotation(lines = anno_enriched(gp = gpar(col = 1:4),
-                                                                         show_error = T)),
-                top_annotation_height = unit(2, "cm"),
-                row_order = 1:length(gffall_sort),
-                split=gffall_sort$class,
-                axis_name = c("-500", "STOP","500"))+
-  Heatmap(partition, col = structure(1:4, names = as.character(1:4)), name = "",row_order = 1:length(gffall_sort),
-          show_row_names = FALSE, width = unit(5, "mm"))
-
+# Set up the plot
+p <- ggplot(allgroups, aes(x=Position, y=Mean, group=Data, fill=Data,colour=Data))+
+  theme(panel.background = element_rect(fill = "white", colour = "grey50")) +
+  geom_vline(xintercept = 500, lty = 3) +
+  scale_x_continuous(breaks = c(0, 500, 1000),
+                     labels = c('-0.5kb', 'ATG','0.5kb'))
+p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha=0.3, color=NA) + geom_line()
+p
 ####################################################################################
 ####################################################################################
 # Figure 2c
@@ -200,6 +204,7 @@ mean(lowlow$widths) #682.5794
 mean(highhigh$widths) #840.6538
 median(lowlow$widths) #393
 median(highhigh$widths) #674
+
 # Tandem IGRs
 
 gff <- hwglabr2::get_gff('SK1Yue')
@@ -321,3 +326,4 @@ mean(lowlow$width) #777.6067
 mean(highhigh$width) #849.0435
 median(lowlow$width) #420.5
 median(highhigh$width) #725
+
