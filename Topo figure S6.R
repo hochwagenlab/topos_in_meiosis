@@ -3,8 +3,8 @@
 ####################################################################################
 # Figure S6a
 
-Top2_34 = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-34C-493-533-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-34C-493-533-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-top2_1 = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-top2-4-496-537-Reps-SK1Yue-B3W3-MACS2/Top2-top2-4-496-537-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_34 = hwglabr2::import_bedGraph("Top2-wildtype-34C-493-533-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+top2_1 = hwglabr2::import_bedGraph("Top2-top2-4-496-537-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 
 gendiv = function(bdg) {
   gavg = hwglabr2::average_chr_signal(bdg)$genome_avrg
@@ -60,8 +60,8 @@ cor(x=Top2_34cnf_bins1000$binned1000_score, y=Top2_top2nf_bins1000$binned1000_sc
 library(GenomicRanges)
 library(ggplot2)
 
-Top2_wt = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top2_top2 = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-top2-4-496-537-Reps-SK1Yue-B3W3-MACS2/Top2-top2-4-496-537-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = hwglabr2::import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_top2 = hwglabr2::import_bedGraph("Top2-top2-4-496-537-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 
 gendiv = function(bdg) {
   gavg = hwglabr2::average_chr_signal(bdg)$genome_avrg

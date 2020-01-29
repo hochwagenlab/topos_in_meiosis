@@ -5,8 +5,8 @@ library(ggplot2)
 
 # Figure 7d
 
-Top2_wt = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top2_HA = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/2014-10-13/SK1_Yue/AH7688B-141013-SK1Yue-B3W3-MACS2/AH7688B-141013-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = hwglabr2::import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_HA = hwglabr2::import_bedGraph("AH7688B-141013-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 
 gendiv = function(bdg) {
   gavg = hwglabr2::average_chr_signal(bdg)$genome_avrg

@@ -6,8 +6,8 @@ library(GenomicRanges)
 
 # Figure S1C: correlation between Top1 and Top2
 
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -60,7 +60,7 @@ cor(x=Top2_wt_bins1000$binned1000_score, y=Top1_bins1000$binned1000_score, use="
 
 ################################################################
 ################################################################
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)

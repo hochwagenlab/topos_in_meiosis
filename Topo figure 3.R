@@ -11,16 +11,16 @@ library(EnrichedHeatmap)
 spikein_normalization_factor_from_counts <- function(
   ref_chip_counts, ref_input_counts, test_chip_counts, test_input_counts,
   return_counts=FALSE) {
-  
+
   # Put paths in list
   files <- list(ref_chip=ref_chip_counts, ref_input=ref_input_counts,
                 test_chip=test_chip_counts, test_input=test_input_counts)
-  
+
   # Convert each element into list, if not one already
   for (i in seq_along(files)) {
     if (!is.list(files[[i]])) files[[i]] <- list(files[[i]])
   }
-  
+
   # Print files to read to console
   message('>>> Read alignment count files:')
   for (i in seq_along(files)) {
@@ -28,7 +28,7 @@ spikein_normalization_factor_from_counts <- function(
       message('   ', basename(file))
     }
   }
-  
+
   message()
   # Read files into tibble in list
   tables <- list()
@@ -37,7 +37,7 @@ spikein_normalization_factor_from_counts <- function(
                           simplify=FALSE, USE.NAMES=TRUE)
   }
   names(tables) <- names(files)
-  
+
   message()
   # Get read counts per chromosome
   message('>>> Count reads per genome:')
@@ -47,7 +47,7 @@ spikein_normalization_factor_from_counts <- function(
                           simplify=FALSE, USE.NAMES=TRUE)
   }
   names(counts) <- names(tables)
-  
+
   # Add-up counts for replicates (results in nested lists)
   for (i in seq_along(counts)) {
     if (length(counts[[i]]) > 1) {
@@ -58,22 +58,22 @@ spikein_normalization_factor_from_counts <- function(
       counts[[i]] <- total
     } else counts[[i]] <- unlist(counts[[i]])
   }
-  
+
   if (return_counts) {
     message('---')
     message('Done!')
     return(counts)
   }
-  
+
   # Compute normalization factor
   result <- normalization_factor(ctrl_input=counts$ref_input,
                                  ctrl_chip=counts$ref_chip,
                                  test_input=counts$test_input,
                                  test_chip=counts$test_chip)
-  
+
   message('---')
   message('Done!')
-  
+
   return(result)
 }
 
@@ -84,14 +84,14 @@ sum_per_genome <- function(df) {
     df[apply(df, 1, function(x) str_detect(x[1],'_S288C')), 2])
   SK1 <- sum(
     df[apply(df, 1, function(x) str_detect(x[1], '_SK1')), 2])
-  
+
   # Print result to console
   message('  S288C: ', formatC(S288C, big.mark=",",
                                drop0trailing=TRUE, format="f"))
   message('  SK1: ', formatC(SK1, big.mark=",",
                              drop0trailing=TRUE, format="f"))
   message('      ', round(S288C * 100 / (SK1 + S288C), 1), '% spike-in reads')
-  
+
   # Return result as named vector
   c('S288C'=S288C, 'SK1'=SK1)
 }
@@ -102,14 +102,14 @@ normalization_factor <- function(ctrl_input, ctrl_chip,
   # Compute Q values
   Q_ctrl_input <- ctrl_input['S288C'] / ctrl_input['SK1']
   Q_ctrl_chip <- ctrl_chip['S288C'] / ctrl_chip['SK1']
-  
+
   Q_test_input <- test_input['S288C'] / test_input['SK1']
   Q_test_chip <- test_chip['S288C'] / test_chip['SK1']
-  
+
   # Compute normalization factors
   a_ctrl <- Q_ctrl_input / Q_ctrl_chip
   a_test <- Q_test_input / Q_test_chip
-  
+
   # Return reference strain-centric normalization factor
   a_test/ a_ctrl
 }
@@ -277,7 +277,7 @@ ggplot(Top2_level[which(Top2_level$sample!='Reference'),],aes(x=sample,y=Top2lev
   stat_summary(fun.y=mean, geom="bar", width=0.5, alpha=0.25, colour=NA) +
   geom_point(size=1.5, alpha=1) +
   scale_x_discrete(labels=c(expression('0h'),
-                            expression('3h'),expression('34C'),expression('spo11'),expression('rec8'),expression('top2-1'))) + 
+                            expression('3h'),expression('34C'),expression('spo11'),expression('rec8'),expression('top2-1'))) +
   theme_classic()  + theme(legend.position = "none") +
   labs(title = '', x = '', y = 'Relative Top2 amount')
 
@@ -285,9 +285,9 @@ ggplot(Top2_level[which(Top2_level$sample!='Reference'),],aes(x=sample,y=Top2lev
 ####################################################################################
 # Figure 3b
 
-spo11oligo <- rtracklayer::import.bedGraph("/Volumes/LabShare/Jonna/Spo11_oligo_mapping/SK1Yue/Spo11oligo_WT1_SRR-clip-MACS2_extsize37/Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
+spo11oligo <- rtracklayer::import.bedGraph("Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
 
 gff <- gff[which(gff$type=='gene')]
 colnames(transcription)[1] <- "ID"
@@ -367,7 +367,7 @@ p
 # Figure 3c
 
 # Spo11 oligos
-spo11oligo <- rtracklayer::import.bedGraph("/Volumes/LabShare/Jonna/Spo11_oligo_mapping/SK1Yue/Spo11oligo_WT1_SRR-clip-MACS2_extsize37/Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
+spo11oligo <- rtracklayer::import.bedGraph("Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
 
 intergen <- hwglabr2::get_intergenic_regions("SK1Yue",as_gr=T)
 prom <- intergen[intergen$type=="divergent"|intergen$type=='tandem']
@@ -387,7 +387,7 @@ EnrichedHeatmap(prommat, col = col_fun, name = "Spo11",
                 row_order = 1:length(prom))
 
 # Nucleosomes
-mnase3 = rtracklayer::import.bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Nucleosome_replicates_PM-MACS2/Nucleosome_reps-SK1-MACS2_treat_pileup.bdg")
+mnase3 = rtracklayer::import.bedGraph("Nucleosome_reps-SK1-MACS2_treat_pileup.bdg")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -423,8 +423,8 @@ import.broadPeak <- function(...) {
 }
 
 SK1Yue_Spo11_DSB <- get_dsb_hotspots('SK1Yue')
-Top2_peak = import.broadPeak("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_peaks.broadPeak")
-Top1_peak = import.broadPeak("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_peaks.broadPeak")
+Top2_peak = import.broadPeak("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_peaks.broadPeak")
+Top1_peak = import.broadPeak("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_peaks.broadPeak")
 
 #Hotspots that overlap with Top2
 Spo11Top2 = findOverlaps(Top2_peak,SK1Yue_Spo11_DSB)

@@ -9,7 +9,7 @@ library(tidyverse)
 
 # Figure 2a
 
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -20,7 +20,7 @@ gendiv = function(bdg) {
 Top1_mycd = gendiv(Top1_myc)
 
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
 gff <- gff[which(gff$type=='gene')]
 colnames(transcription)[1] <- "ID"
 gff <- data.frame(gff)
@@ -100,7 +100,7 @@ p
 ####################################################################################
 # ATG heatmap for Top2
 
-Top2_wt = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = hwglabr2::import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -172,7 +172,7 @@ p
 
 # Divergent IGRs
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('2017.06.16_SK1Yue_EdgeR_tpm.csv')
 intergen <- hwglabr2::get_intergenic_regions('SK1Yue',as_gr = T)
 divergent <- intergen[which(intergen$type=='divergent')]
 mcols(divergent)['widths'] <- width(divergent)
@@ -208,7 +208,7 @@ median(highhigh$widths) #674
 # Tandem IGRs
 
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('2017.06.16_SK1Yue_EdgeR_tpm.csv')
 intergen <- hwglabr2::get_intergenic_regions('SK1Yue',as_gr = T)
 tandem <- intergen[which(intergen$type=='tandem')]
 mcols(tandem)['widths'] <- width(tandem)
@@ -251,7 +251,7 @@ median(highhigh$widths) #469
 ####################################################################################
 ####################################################################################
 # Figure 2d
-brartotmrna <- read.csv('/Volumes/LabShare/Jonna/papers/Topo/figures/RNAseq/GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
+brartotmrna <- read.csv('GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
 mrna0h <- brartotmrna[,c('gene','X0hr.totRNA.rpkm')]
 mrnaveg <- brartotmrna[,c('gene','vexp.repl1.totrna.rpkm')]
 
@@ -326,4 +326,3 @@ mean(lowlow$width) #777.6067
 mean(highhigh$width) #849.0435
 median(lowlow$width) #420.5
 median(highhigh$width) #725
-

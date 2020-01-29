@@ -9,9 +9,9 @@ library(ggplot2)
 
 
 # Figure S3a
-Top2_0 = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-0h-412-503-530-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-0h-412-503-530-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_0 = import_bedGraph("Top2-wildtype-0h-412-503-530-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 nf_Top2_0h = 0.7541135 # calculated in Fig 3
-Top2_3 = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_3 = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 nf_Top2_3h = 1.013089 # calculated in Fig 3
 median_nf = function(bdg,nf) {
   gmedian = median(rep(GenomicRanges::score(bdg),GenomicRanges::width(bdg)))
@@ -101,10 +101,10 @@ p
 ####################################################################################
 # Figure S3b
 
-spo11oligo <- rtracklayer::import.bedGraph("/Volumes/LabShare/Jonna/Spo11_oligo_mapping/SK1Yue/Spo11oligo_WT1_SRR-clip-MACS2_extsize37/Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
+spo11oligo <- rtracklayer::import.bedGraph("Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
 
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
 gff <- gff[which(gff$type=='gene')]
 colnames(transcription)[1] <- "ID"
 gff <- data.frame(gff)
@@ -139,7 +139,7 @@ summary(lm(data=plotline,log(spo11oligo)~log(txn)))
 ####################################################################################
 # Figure S3c
 
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -223,7 +223,7 @@ p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha=0.3, color=NA) + geo
 p
 ######
 # Top2 at hotspots
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -307,7 +307,7 @@ p
 ####################################################################################
 ####################################################################################
 # Figure S3d
-spo11oligo <- rtracklayer::import.bedGraph("/Volumes/LabShare/Jonna/Spo11_oligo_mapping/SK1Yue/Spo11oligo_WT1_SRR-clip-MACS2_extsize37/Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
+spo11oligo <- rtracklayer::import.bedGraph("Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
 
 # Average signal plots by size
 intergen <- hwglabr2::get_intergenic_regions("SK1Yue",as_gr=T)
@@ -397,10 +397,10 @@ ggplot(auc1df,aes(x=prom1groups,y=auc1data,fill=prom1groups,width=0.8)) +
   theme_classic()+
   labs(title = '', x = '', y = 'Relative Spo11 oligo amount')
 
-wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat4)))  
-wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat2)))  
-wilcox.test(rowSums(data.frame(prommat2)),rowSums(data.frame(prommat3)))  
-wilcox.test(rowSums(data.frame(prommat3)),rowSums(data.frame(prommat4)))  
+wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat4)))
+wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat2)))
+wilcox.test(rowSums(data.frame(prommat2)),rowSums(data.frame(prommat3)))
+wilcox.test(rowSums(data.frame(prommat3)),rowSums(data.frame(prommat4)))
 
 p <- c(wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat4)))$p.value,
        wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat3)))$p.value,
@@ -410,4 +410,3 @@ p <- c(wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat4)))$
        wilcox.test(rowSums(data.frame(prommat3)),rowSums(data.frame(prommat4)))$p.value)
 p.adjust(p, method = "bonferroni", n = length(p))
 #[1] 5.505085e-18 6.330337e-27 2.614342e-07 3.581659e-04 1.007698e-09 1.449708e-01
-

@@ -9,8 +9,8 @@ library(ggplot2)
 
 # Figure 1a
 
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -49,15 +49,15 @@ plot_genomeview <- function(df_samp1,df_samp2,position1,position2,name1,name2,ch
        max(df_samp2[df_samp2$position>=position1 & df_samp2$position<=position2,1]))
   by=c(0,df_samp2[df_samp2$position>=position1 & df_samp2$position<=position2,2],0)
   plot(df_samp1[df_samp1$position>=position1 & df_samp1$position<=position2,],
-       xlab=paste0('Position on chromosome ',chrnum,' (kb)'), ylab=name1, 
+       xlab=paste0('Position on chromosome ',chrnum,' (kb)'), ylab=name1,
        type='h',col=color1,frame.plot=F)#,
   polygon(ax,ay,col=color1,border = NA)
   plot(df_samp2[df_samp2$position>=position1 & df_samp2$position<=position2,],
-       xlab=paste0('Position on chromosome ',chrnum,' (kb)'), ylab=name2, 
+       xlab=paste0('Position on chromosome ',chrnum,' (kb)'), ylab=name2,
        type='h',col=color2,frame.plot=F)#,
   polygon(bx,by,col=color2,border = NA)
   par(mfrow=c(1,1))
-  
+
 }
 
 Top1_mycdgv <- genomeView(Top1_mycd,"II",10)
@@ -69,8 +69,8 @@ plot_genomeview(Top1_mycdgv,Top2_wtdgv,640,720,"Top1","Top2","II","green","blue"
 ####################################################################################
 # Figure 1b
 
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
@@ -113,7 +113,7 @@ p
 # Figure 1c
 # Top2
 #convergent regions
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -182,8 +182,8 @@ p
 ####################################################################################
 # Figure 1d-g
 
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
@@ -250,10 +250,10 @@ ggplot(auc1df,aes(x=prom1groups,y=auc1data,fill=prom1groups,width=0.8)) +
   theme_classic()+
   labs(title = '', x = '', y = 'Relative Top1 amount')
 
-wilcox.test(rowSums(data.frame(prom1mat1)),rowSums(data.frame(prom1mat4)))  
-wilcox.test(rowSums(data.frame(prom1mat1)),rowSums(data.frame(prom1mat2)))  
-wilcox.test(rowSums(data.frame(prom1mat2)),rowSums(data.frame(prom1mat3)))  
-wilcox.test(rowSums(data.frame(prom1mat3)),rowSums(data.frame(prom1mat4)))  
+wilcox.test(rowSums(data.frame(prom1mat1)),rowSums(data.frame(prom1mat4)))
+wilcox.test(rowSums(data.frame(prom1mat1)),rowSums(data.frame(prom1mat2)))
+wilcox.test(rowSums(data.frame(prom1mat2)),rowSums(data.frame(prom1mat3)))
+wilcox.test(rowSums(data.frame(prom1mat3)),rowSums(data.frame(prom1mat4)))
 p <- c(wilcox.test(rowSums(data.frame(prom1mat1)),rowSums(data.frame(prom1mat4)))$p.value,
        wilcox.test(rowSums(data.frame(prom1mat1)),rowSums(data.frame(prom1mat3)))$p.value,
        wilcox.test(rowSums(data.frame(prom1mat1)),rowSums(data.frame(prom1mat2)))$p.value,
@@ -433,7 +433,7 @@ p <- ggplot(allgroups, aes(x=Position, y=Mean, group=Data, fill=Data,colour=Data
 p <- p + geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha=0.3, color=NA) + geom_line()
 p
 ########################################################################################
-spo11oligo <- rtracklayer::import.bedGraph("/Volumes/LabShare/Jonna/Spo11_oligo_mapping/SK1Yue/Spo11oligo_WT1_SRR-clip-MACS2_extsize37/Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
+spo11oligo <- rtracklayer::import.bedGraph("Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
 intergen <- hwglabr2::get_intergenic_regions("SK1Yue",as_gr=T)
 prom <- intergen[intergen$type=="divergent"|intergen$type=='tandem']
 mcols(prom)['widths'] <- width(prom)
@@ -480,10 +480,10 @@ ggplot(auc1df,aes(x=prom1groups,y=auc1data,fill=prom1groups,width=0.8)) +
   theme_classic()+
   labs(title = '', x = '', y = 'Relative Spo11 oligo amount')
 
-wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat4)))  
-wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat2)))  
-wilcox.test(rowSums(data.frame(prommat2)),rowSums(data.frame(prommat3)))  
-wilcox.test(rowSums(data.frame(prommat3)),rowSums(data.frame(prommat4)))  
+wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat4)))
+wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat2)))
+wilcox.test(rowSums(data.frame(prommat2)),rowSums(data.frame(prommat3)))
+wilcox.test(rowSums(data.frame(prommat3)),rowSums(data.frame(prommat4)))
 
 p <- c(wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat4)))$p.value,
        wilcox.test(rowSums(data.frame(prommat1)),rowSums(data.frame(prommat3)))$p.value,
@@ -496,8 +496,8 @@ p.adjust(p, method = "bonferroni", n = length(p))
 ###################################
 # correlation between Top1 and Top2
 
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -547,5 +547,3 @@ plot(data_rm,ylim=c(0,3.25),xlim=c(0,3.25))
 abline(lm(data=data_rm,Top1_bins1000.binned1000_score~Top2_wt_bins1000.binned1000_score))
 cor(x=Top2_wt_bins1000$binned1000_score, y=Top1_bins1000$binned1000_score, use="complete.obs", method="pearson")
 #[1] 0.7557327
-
-

@@ -8,12 +8,12 @@ library(ggplot2)
 
 # Figure 6b
 
-spo11oligo <- rtracklayer::import.bedGraph("/Volumes/LabShare/Jonna/Spo11_oligo_mapping/SK1Yue/Spo11oligo_WT1_SRR-clip-MACS2_extsize37/Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top2_wt34 = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-34C-493-533-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-34C-493-533-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top2_top2 = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-top2-4-496-537-Reps-SK1Yue-B3W3-MACS2/Top2-top2-4-496-537-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Red1_WT = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Red1-WT-34C-410-495-528-Reps-SK1Yue-B3W3-MACS2/Red1-WT-34C-410-495-528-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Red1_top2 = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Red1-top2-4-411-498-535-Reps-SK1Yue-B3W3-MACS2/Red1-top2-4-411-498-535-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+spo11oligo <- rtracklayer::import.bedGraph("Spo11oligo_WT1_SRR-clip-MACS2_extsize37_treat_pileup.bdg")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt34 = import_bedGraph("Top2-wildtype-34C-493-533-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_top2 = import_bedGraph("Top2-top2-4-496-537-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Red1_WT = import_bedGraph("Red1-WT-34C-410-495-528-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Red1_top2 = import_bedGraph("Red1-top2-4-411-498-535-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
@@ -58,16 +58,16 @@ plot_genomeview <- function(df_samp1,df_samp2,position1,position2,name1,name2,ch
        df_samp2[df_samp2$position>=position1 & df_samp2$position<=position2,1],
        max(df_samp2[df_samp2$position>=position1 & df_samp2$position<=position2,1]))
   by=c(0,df_samp2[df_samp2$position>=position1 & df_samp2$position<=position2,2],0)
-  plot(df_samp1[df_samp1$position>=position1 & df_samp1$position<=position2,], 
+  plot(df_samp1[df_samp1$position>=position1 & df_samp1$position<=position2,],
        xlab=paste0('Position on chromosome ',chrnum,' (kb)'), ylab=name1, type='h',
        col=color1,frame.plot=F,ylim=c(0,ymaximum1))
   polygon(ax,ay,col=color1,border = NA)
-  plot(df_samp2[df_samp2$position>=position1 & df_samp2$position<=position2,], 
+  plot(df_samp2[df_samp2$position>=position1 & df_samp2$position<=position2,],
        xlab=paste0('Position on chromosome ',chrnum,' (kb)'), ylab=name2, type='h',
        col=color2,frame.plot=F,ylim=c(0,ymaximum2))
   polygon(bx,by,col=color2,border = NA)
   par(mfrow=c(1,1))
-  
+
 }
 
 spo11oligogv <- genomeView(spo11oligo,"XII",10)
@@ -84,8 +84,8 @@ plot_genomeview(Red1_WTgv,Red1_top2gv,103,155,"Spo11","Red1","XII","red","red4",
 ###################################################
 # Figure 6b
 #convergent regions
-Top2_wt = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
-Top2_top2 = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-top2-4-496-537-Reps-SK1Yue-B3W3-MACS2/Top2-top2-4-496-537-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_top2 = import_bedGraph("Top2-top2-4-496-537-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg

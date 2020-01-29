@@ -3,7 +3,7 @@
 ####################################################################################
 # Figure S2a
 
-Top1_myc = import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/AH9847Myc-3h-735-841-Reps-SK1Yue-B3W4-MACS2/AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
+Top1_myc = import_bedGraph("AH9847Myc-3h-735-841-Reps-SK1Yue-PM_B3W4_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -14,7 +14,7 @@ gendiv = function(bdg) {
 Top1_mycd = gendiv(Top1_myc)
 
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
 gff <- gff[which(gff$type=='gene')]
 colnames(transcription)[1] <- "ID"
 gff <- data.frame(gff)
@@ -45,7 +45,7 @@ cor(x=sigrna$txn,y=sigrna$top1, use="complete.obs", method="pearson")
 ####################################################################################
 # Figure S2b
 
-Top2_wt = hwglabr2::import_bedGraph("/Volumes/LabShare/HTGenomics/HiSeqOutputs/AveReps_SK1Yue_MACS2_FE/Top2-wildtype-413-504-Reps-SK1Yue-B3W3-MACS2/Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
+Top2_wt = hwglabr2::import_bedGraph("Top2-wildtype-413-504-Reps-SK1Yue-PM_B3W3_MACS2_FE.bdg.gz")
 gendiv = function(bdg) {
   gavg = average_chr_signal(bdg)$genome_avrg
   print(gavg)
@@ -56,7 +56,7 @@ gendiv = function(bdg) {
 Top2_wtd = gendiv(Top2_wt)
 
 gff <- hwglabr2::get_gff('SK1Yue')
-transcription <- read.csv('/Volumes/LabShare/HTGenomics/HiSeqOutputs/RNA-seq/2016.03.16-2h+3h/2017.06.16_SK1Yue_EdgeR_tpm.csv')
+transcription <- read.csv('2017.06.16_SK1Yue_EdgeR_tpm.csv')
 gff <- gff[which(gff$type=='gene')]
 colnames(transcription)[1] <- "ID"
 gff <- data.frame(gff)
@@ -91,7 +91,7 @@ cor(x=sigrna2$txn,y=sigrna2$top2, use="complete.obs", method="pearson")
 library(hwglabr2)
 library(GenomicRanges)
 
-brartotmrna <- read.csv('/Volumes/LabShare/Jonna/papers/Topo/figures/RNAseq/GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
+brartotmrna <- read.csv('GSE108778_timecourse_replicate_2_totRNA.txt.gz',sep='\t',header=T)
 mrna3h <- brartotmrna[,c('gene','X3hr.totRNA.rpkm')]
 mrna10h <- brartotmrna[,c('gene','X10hr.totRNA.rpkm')]
 mrnaAA <- brartotmrna[,c('gene','MATa.a.totRNA.rpkm')]
